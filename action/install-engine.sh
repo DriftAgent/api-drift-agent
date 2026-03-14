@@ -7,7 +7,7 @@ OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64\|arm64/arm64/')
 
 gh release download \
-  --repo pgomes13/drift-guard-engine \
+  --repo DriftAgent/api-drift-engine \
   --pattern "drift-guard_${OS}_${ARCH}.tar.gz" \
   --dir /tmp \
   --clobber

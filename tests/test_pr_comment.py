@@ -45,15 +45,16 @@ class TestBuildComment:
         body = _build_comment({"org/svc": "https://..."}, [_change(description="gone")], "org/api")
         assert "gone" in body
 
-    def test_contains_repo_link(self):
-        body = _build_comment({"org/svc": "https://github.com/org/svc/issues/1"}, [_change()], "org/api")
-        assert "https://github.com/org/svc" in body
-        assert "org/svc" in body
-
-    def test_contains_issue_url(self):
+    def test_contains_issue_link(self):
         url = "https://github.com/org/svc/issues/5"
         body = _build_comment({"org/svc": url}, [_change()], "org/api")
-        assert url in body
+        assert f'href="{url}"' in body
+        assert "org/svc #5" in body
+        assert 'target="_blank"' in body
+
+    def test_no_repo_column(self):
+        body = _build_comment({"org/svc": "https://github.com/org/svc/issues/1"}, [_change()], "org/api")
+        assert "| Repo |" not in body
 
     def test_singular_repo_noun(self):
         body = _build_comment({"org/a": "https://..."}, [_change()], "org/api")
@@ -79,11 +80,11 @@ class TestBuildComment:
         assert "1 breaking changes" not in body
 
     def test_repos_sorted_in_table(self):
-        urls = {"org/z": "https://z", "org/a": "https://a", "org/m": "https://m"}
+        urls = {"org/z": "https://z/issues/1", "org/a": "https://a/issues/2", "org/m": "https://m/issues/3"}
         body = _build_comment(urls, [_change()], "org/api")
         lines = body.splitlines()
-        table_rows = [l for l in lines if l.startswith("| [org/")]
-        names = [r.split("[")[1].split("]")[0] for r in table_rows]
+        table_rows = [l for l in lines if l.startswith("| <a ")]
+        names = [r.split(">")[1].split(" #")[0] for r in table_rows]
         assert names == sorted(names)
 
 

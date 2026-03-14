@@ -112,7 +112,7 @@ def _build_issue_body(
         "**Action required:** Update these references before the provider PR is merged.",
         "",
         "---",
-        f"_Opened by [drift-guard](https://github.com/pgomes13/drift-guard-engine) · {pr_link}_",
+        f"_Opened by [drift-guard](https://github.com/DriftAgent/api-drift-engine) · {pr_link}_",
     ]
     return "\n".join(lines)
 
