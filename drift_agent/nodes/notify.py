@@ -112,7 +112,7 @@ def _build_issue_body(
         "**Action required:** Update these references before the provider PR is merged.",
         "",
         "---",
-        f"_Opened by [Drift Agent](https://github.com/DriftAgent/api-drift-agent) · {pr_link}_",
+        f"_Opened by [Drift Agent](https://github.com/DriftaBot/api-drift-agent) · {pr_link}_",
     ]
     return "\n".join(lines)
 

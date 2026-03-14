@@ -9,7 +9,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide' },
       { text: 'CLI', link: '/cli' },
-      { text: 'GitHub', link: 'https://github.com/DriftAgent/api-drift-agent', target: '_blank' },
+      { text: 'GitHub', link: 'https://github.com/DriftaBot/api-drift-agent', target: '_blank' },
     ],
 
     sidebar: [
@@ -31,7 +31,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/DriftAgent/api-drift-agent' },
+      { icon: 'github', link: 'https://github.com/DriftaBot/api-drift-agent' },
     ],
 
     footer: {

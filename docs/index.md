@@ -13,7 +13,7 @@ hero:
       link: /guide#quick-start
     - theme: alt
       text: View on GitHub
-      link: https://github.com/DriftAgent/api-drift-agent
+      link: https://github.com/DriftaBot/api-drift-agent
       target: _blank
     - theme: alt
       text: GitHub Marketplace

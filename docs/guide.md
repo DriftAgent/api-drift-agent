@@ -41,7 +41,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: DriftAgent/api-drift-agent@v1
+      - uses: DriftaBot/api-drift-agent@v1
         with:
           org-read-token: ${{ secrets.ORG_READ_TOKEN }}
           consumer-repos: |
