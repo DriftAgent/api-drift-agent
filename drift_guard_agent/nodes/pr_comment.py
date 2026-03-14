@@ -10,6 +10,7 @@ from drift_guard_agent.state import DriftState
 
 _GITHUB_API = "https://api.github.com"
 _COMMENT_MARKER = "<!-- drift-guard-pr-comment -->"
+_MARKETPLACE_URL = "https://github.com/marketplace/actions/api-drift-agent"
 
 
 def pr_comment(state: DriftState) -> dict:
@@ -23,9 +24,8 @@ def pr_comment(state: DriftState) -> dict:
         return {}
 
     diff = state.get("diff")
-    breaking_count = sum(1 for c in diff.changes if c.severity == "breaking") if diff else 0
-
-    body = _build_comment(issue_urls, breaking_count, provider_repo)
+    breaking = [c for c in diff.changes if c.severity == "breaking"] if diff else []
+    body = _build_comment(issue_urls, breaking, provider_repo)
 
     if dry_run:
         print(f"\n[pr_comment] DRY RUN — PR comment for {provider_repo}#{pr_number}:\n{body}\n")
@@ -47,12 +47,26 @@ def pr_comment(state: DriftState) -> dict:
     return {}
 
 
-def _build_comment(issue_urls: dict[str, str], breaking_count: int, provider_repo: str) -> str:
+def _build_comment(issue_urls: dict[str, str], breaking: list, provider_repo: str) -> str:
     n = len(issue_urls)
     noun = "repo" if n == 1 else "repos"
+    count = len(breaking)
+
     lines = [
         _COMMENT_MARKER,
-        f"## ⚠️ API Drift Alert — {breaking_count} breaking change{'s' if breaking_count != 1 else ''} detected",
+        f"## ⚠️ [DriftAgent]({_MARKETPLACE_URL}) Report — {count} breaking change{'s' if count != 1 else ''} detected",
+        "",
+        "### Breaking changes",
+        "",
+        "| Method | Path | Description |",
+        "| ------ | ---- | ----------- |",
+    ]
+    for c in breaking:
+        lines.append(f"| `{c.method}` | `{c.path}` | {c.description} |")
+
+    lines += [
+        "",
+        f"### Affected consumer {noun}",
         "",
         f"Issues have been opened in **{n}** affected consumer {noun}:",
         "",
@@ -65,8 +79,7 @@ def _build_comment(issue_urls: dict[str, str], breaking_count: int, provider_rep
 
     lines += [
         "",
-        "_Opened by [drift-guard](https://github.com/pgomes13/drift-guard-engine). "
-        "Update consumer repos before merging this PR._",
+        f"_Update consumer repos before merging this PR · [DriftAgent]({_MARKETPLACE_URL})_",
     ]
     return "\n".join(lines)
 
