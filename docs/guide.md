@@ -132,8 +132,6 @@ Provider PR opened
 |---|---|---|
 | `org-read-token` | No | PAT with `repo` + `read:org` scopes. Required to clone consumer repos and open issues in them. Falls back to `GITHUB_TOKEN` (which cannot open issues in other repos). |
 | `consumer-repos` | No | Newline or comma-separated list of `owner/repo` to scan. When omitted, the PR comment includes setup instructions and no scan is run. |
-| `base-schema` | No | Path to schema file. Auto-detected if omitted — supports OpenAPI (`.yaml`/`.yml`/`.json`), GraphQL (`.graphql`/`.gql`), and Protobuf (`.proto`). |
-| `head-schema` | No | Path on the PR branch. Defaults to `base-schema`. |
 | `anthropic-api-key` | No | Enables Claude risk analysis in opened issues. |
 
 ## Re-run behaviour
@@ -152,7 +150,6 @@ The agent is fully idempotent — safe to re-run at any time:
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Action fails: "No API schema found" | Schema not at a standard path, or generated at runtime | Set `base-schema` explicitly |
 | Action fails: schema diff error | Schema file is invalid or malformed | Validate locally: `drift-guard openapi --base ... --head ...` (or `graphql`/`grpc`) |
 | Issues created but no AI explanations | `ANTHROPIC_API_KEY` not set | Add the secret — the agent works without it but skips risk analysis |
 | No issues created in consumer repos | `org-read-token` missing or insufficient scope | Set a PAT with `repo` + `read:org` scopes |
