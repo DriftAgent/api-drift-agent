@@ -5,13 +5,13 @@ Use this if you want to run the agent locally or integrate it into a non-GitHub 
 ## Installation
 
 ```sh
-pip install drift-guard-agent
+pip install drift-agent
 ```
 
 ## Usage
 
 ```sh
-drift-guard-agent \
+drift-agent \
   --diff diff.json \
   --org my-org \
   --token $ORG_READ_TOKEN \

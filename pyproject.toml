@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "drift-guard-agent"
+name = "drift-agent"
 version = "0.1.0"
 description = "LangGraph agent that detects breaking API changes and opens GitHub Issues in affected consumer repos."
 readme = "README.md"
@@ -27,7 +27,7 @@ dependencies = [
 dev = ["ruff", "pytest>=8.0", "pytest-httpx>=0.30"]
 
 [project.scripts]
-drift-guard-agent = "drift_guard_agent.cli:main"
+drift-agent = "drift_guard_agent.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/DriftAgent/api-drift-agent"

@@ -9,6 +9,9 @@ hero:
       text: Get Started
       link: /guide
     - theme: alt
+      text: Take Tour
+      link: /guide#how-it-works
+    - theme: alt
       text: View on GitHub
       link: https://github.com/DriftAgent/api-drift-agent
       target: _blank

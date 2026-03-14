@@ -37,7 +37,7 @@ runs:
         GH_TOKEN: ${{ github.token }}
       run: bash "$GITHUB_ACTION_PATH/action/install-engine.sh"
 
-    - name: Install drift-guard-agent
+    - name: Install drift-agent
       shell: bash
       run: pip install --quiet "$GITHUB_ACTION_PATH"
 

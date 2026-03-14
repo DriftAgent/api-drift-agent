@@ -184,7 +184,7 @@ def _upsert_pr_comment(
 
     except httpx.HTTPStatusError as e:
         if e.response.status_code == 403:
-            print(f"::warning::drift-guard-agent: missing 'issues: write' permission — PR comment not posted on {provider_repo}#{pr_number}")
+            print(f"::warning::drift-agent: missing 'issues: write' permission — PR comment not posted on {provider_repo}#{pr_number}")
         else:
             print(f"[pr_comment] Failed to post PR comment: {e}")
     except httpx.HTTPError as e:
