@@ -1,6 +1,6 @@
 # Guide
 
-`@driftabot/agent` detects breaking API changes in provider PRs, scans a configured list of consumer repos, and automatically opens GitHub Issues in any that are affected — zero setup required on the consumer side.
+DriftaBot Agent detects breaking API changes in provider PRs, scans a configured list of consumer repos, and automatically opens GitHub Issues in any that are affected — zero setup required on the consumer side.
 
 ## CLI
 
