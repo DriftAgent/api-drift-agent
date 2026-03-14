@@ -28,7 +28,7 @@ Go to **Settings → Secrets and variables → Actions → New repository secret
 
 ### Step 3 — Add the workflow file
 
-Create `.github/workflows/driftabot.yml` in your provider repo — or [📋 copy it directly](https://raw.githubusercontent.com/DriftaBot/agent/main/.github/workflows/driftabot.yml):
+Create `.github/workflows/driftabot.yml` in your provider repo:
 
 ```yaml
 name: API Drift Check
