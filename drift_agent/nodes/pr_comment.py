@@ -73,7 +73,7 @@ def _build_comment(issue_urls: dict[str, str], breaking: list, provider_repo: st
 
     lines = [
         _COMMENT_MARKER,
-        f"## \u26a0\ufe0f API {_AGENT_LINK} Report \u2014 {count} breaking change{plural} detected",
+        f"## \u26a0\ufe0f {_AGENT_LINK} Report \u2014 {count} breaking change{plural} detected",
         "",
         "### Breaking changes",
         "",
@@ -109,7 +109,7 @@ def _build_not_configured_comment(breaking: list) -> str:
     plural = "s" if count != 1 else ""
     lines = [
         _COMMENT_MARKER,
-        f"## \u26a0\ufe0f API {_AGENT_LINK} Report \u2014 {count} breaking change{plural} detected, no consumer scan conducted",
+        f"## \u26a0\ufe0f {_AGENT_LINK} Report \u2014 {count} breaking change{plural} detected, no consumer scan conducted",
         "",
         "### Breaking changes",
         "",
@@ -139,7 +139,7 @@ def _build_not_configured_comment(breaking: list) -> str:
 def _build_clear_comment() -> str:
     return "\n".join([
         _COMMENT_MARKER,
-        f"## \u2705 API {_AGENT_LINK} Report \u2014 no breaking changes detected",
+        f"## \u2705 {_AGENT_LINK} Report \u2014 no breaking changes detected",
         "",
         "All previously affected consumer repos have been updated, or no breaking changes remain.",
         "",
