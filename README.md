@@ -4,6 +4,13 @@
 
 LangGraph-powered agent that detects breaking API changes in provider PRs and automatically opens GitHub Issues in affected consumer repos — zero config on consumer side.
 
+## CLI
+
+```bash
+brew tap DriftaBot/cli
+brew install driftabot
+```
+
 ## Usage
 
 Add to your provider repo's workflow:
