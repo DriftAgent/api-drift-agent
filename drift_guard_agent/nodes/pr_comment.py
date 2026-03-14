@@ -26,11 +26,14 @@ def pr_comment(state: DriftState) -> dict:
 
     diff = state.get("diff")
     breaking = [c for c in diff.changes if c.severity == "breaking"] if diff else []
+    consumer_repos = state.get("consumer_repos", [])
 
     if issue_urls:
         body = _build_comment(issue_urls, breaking, provider_repo)
+    elif not consumer_repos:
+        body = _build_not_configured_comment()
     else:
-        body = None  # may update to "all clear" if a previous comment exists
+        body = None  # repos were scanned but none affected; may update to "all clear"
 
     if dry_run:
         if body:
@@ -57,6 +60,7 @@ def pr_comment(state: DriftState) -> dict:
         elif existing_id:
             # Breaking changes gone — update stale comment to "all clear"
             _upsert_pr_comment(client, provider_repo, pr_number, _build_clear_comment(), existing_id)
+        # else: no previous comment and nothing to report — stay silent
 
     return {}
 
@@ -97,6 +101,26 @@ def _build_comment(issue_urls: dict[str, str], breaking: list, provider_repo: st
         "_Update consumer repos before merging this PR._",
     ]
     return "\n".join(lines)
+
+
+def _build_not_configured_comment() -> str:
+    return "\n".join([
+        _COMMENT_MARKER,
+        f"## \u26a0\ufe0f API {_AGENT_LINK} Report \u2014 breaking changes detected, no consumer scan conducted",
+        "",
+        "Breaking changes were found in this PR, but no consumer repos have been configured.",
+        "",
+        "Add the `consumer-repos` input to enable scanning:",
+        "",
+        "```yaml",
+        "- uses: DriftAgent/api-drift-agent@v1",
+        "  with:",
+        "    org-read-token: ${{ secrets.ORG_READ_TOKEN }}",
+        "    consumer-repos: |",
+        "      your-org/service-a",
+        "      your-org/service-b",
+        "```",
+    ])
 
 
 def _build_clear_comment() -> str:
