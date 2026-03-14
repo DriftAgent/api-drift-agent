@@ -31,7 +31,7 @@ Go to **Settings → Secrets and variables → Actions → New repository secret
 Create `.github/workflows/driftabot.yml` in your provider repo:
 
 ```yaml
-name: API Drift Check
+name: DriftaBot Agent
 
 on:
   pull_request:

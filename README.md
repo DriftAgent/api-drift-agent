@@ -10,7 +10,8 @@ LangGraph-powered agent that detects breaking API changes in provider PRs and au
 Add to your provider repo - `.github/workflows/driftabot.yml`:
 
 ```yaml
-name: API Drift Check
+name: DriftaBot Agent
+
 on:
   pull_request:
 
