@@ -31,7 +31,7 @@ def pr_comment(state: DriftState) -> dict:
     if issue_urls:
         body = _build_comment(issue_urls, breaking, provider_repo)
     elif not consumer_repos:
-        body = _build_not_configured_comment()
+        body = _build_not_configured_comment(breaking)
     else:
         body = None  # repos were scanned but none affected; may update to "all clear"
 
@@ -103,12 +103,23 @@ def _build_comment(issue_urls: dict[str, str], breaking: list, provider_repo: st
     return "\n".join(lines)
 
 
-def _build_not_configured_comment() -> str:
-    return "\n".join([
+def _build_not_configured_comment(breaking: list) -> str:
+    count = len(breaking)
+    plural = "s" if count != 1 else ""
+    lines = [
         _COMMENT_MARKER,
-        f"## \u26a0\ufe0f API {_AGENT_LINK} Report \u2014 breaking changes detected, no consumer scan conducted",
+        f"## \u26a0\ufe0f API {_AGENT_LINK} Report \u2014 {count} breaking change{plural} detected, no consumer scan conducted",
         "",
-        "Breaking changes were found in this PR, but no consumer repos have been configured.",
+        "### Breaking changes",
+        "",
+        "| Path | Description |",
+        "| ---- | ----------- |",
+    ]
+    for c in breaking:
+        lines.append(f"| `{c.path}` | {c.description} |")
+    lines += [
+        "",
+        "No consumer repos have been configured — scan skipped.",
         "",
         "Add the `consumer-repos` input to enable scanning:",
         "",
@@ -120,7 +131,8 @@ def _build_not_configured_comment() -> str:
         "      your-org/service-a",
         "      your-org/service-b",
         "```",
-    ])
+    ]
+    return "\n".join(lines)
 
 
 def _build_clear_comment() -> str:
