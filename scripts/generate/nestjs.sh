@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # Generate OpenAPI schema from a NestJS project using SwaggerModule.
-# Falls back to any committed swagger/openapi file if generation fails.
 set -euo pipefail
 
 OUTPUT="${1:?Usage: nestjs.sh <output_path>}"
@@ -16,8 +15,9 @@ else
   npm ci 2>/dev/null || npm install
 fi
 
-# Write the schema generation script
-cat > /tmp/drift-nestjs-gen.ts << 'GENEOF'
+# Write the generation script INTO the project directory so Node resolves
+# reflect-metadata and @nestjs/* from the project's own node_modules.
+cat > ./.drift-nestjs-gen.ts << 'GENEOF'
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -65,25 +65,16 @@ generate().catch(e => {
 });
 GENEOF
 
-# Run the generation script
+# Run from within the project directory so module resolution uses project node_modules
 DRIFT_OUTPUT="$OUTPUT" npx ts-node \
   --project tsconfig.json \
   --transpile-only \
-  /tmp/drift-nestjs-gen.ts 2>&1 && exit 0
+  ./.drift-nestjs-gen.ts
 
-echo "::warning::NestJS ts-node generation failed — falling back to committed schema file"
+EXIT_CODE=$?
+rm -f ./.drift-nestjs-gen.ts
 
-# Fallback: look for any committed OpenAPI/swagger file
-COMMITTED=$(find . -maxdepth 4 \( \
-  -name "openapi.yaml" -o -name "openapi.yml" -o -name "openapi.json" \
-  -o -name "swagger.yaml" -o -name "swagger.yml" -o -name "swagger.json" \) \
-  ! -path "*/node_modules/*" ! -path "*/.git/*" | head -1)
-
-if [ -n "$COMMITTED" ]; then
-  cp "$COMMITTED" "$OUTPUT"
-  echo "[drift-agent] fallback: using committed schema $COMMITTED"
-  exit 0
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "::error::NestJS schema generation failed. Check that AppModule can be imported and @nestjs/swagger is installed." >&2
+  exit 1
 fi
-
-echo "::error::NestJS schema generation failed and no committed schema found. Commit a swagger.json or fix ts-node setup." >&2
-exit 1
