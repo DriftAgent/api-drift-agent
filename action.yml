@@ -148,3 +148,12 @@ runs:
           --github-token "$GITHUB_TOKEN" \
           --provider-repo "${{ github.repository }}" \
           --pr "${{ github.event.pull_request.number }}"
+
+    - name: Cleanup
+      if: always()
+      shell: bash
+      run: |
+        rm -rf /tmp/specs /tmp/scripts /tmp/drift-diff.json \
+               /tmp/drift-base-worktree /tmp/drift-guard-agent-clones \
+               /tmp/drift-nestjs-gen.ts /tmp/swag-docs
+        echo "[drift-agent] cleanup done"
