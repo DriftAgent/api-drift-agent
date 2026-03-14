@@ -19,6 +19,10 @@ inputs:
     description: 'GitHub PAT with repo:read + read:org scopes. Used to search and clone private consumer repos. Falls back to GITHUB_TOKEN (public repos only).'
     required: false
     default: ''
+  anthropic-api-key:
+    description: 'Anthropic API key. Enables Claude-powered risk analysis in opened issues.'
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
@@ -104,6 +108,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
         ORG_READ_TOKEN: ${{ inputs.org-read-token != '' && inputs.org-read-token || github.token }}
+        ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
       run: |
         drift-guard-agent \
           --diff /tmp/drift-diff.json \
