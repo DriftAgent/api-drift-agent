@@ -48,6 +48,10 @@ Powered by [drift-guard-engine](https://pgomes13.github.io/drift-guard-engine/).
 | `head-schema` | No | Path on PR branch (defaults to `base-schema`) |
 | `org-read-token` | No | PAT with `repo:read` + `read:org` for private repos |
 
+## Troubleshooting
+
+See the <a href="https://pgomes13.github.io/drift-guard-engine/api-drift-agent.html#troubleshooting" target="_blank">Troubleshooting guide</a> in the docs.
+
 ## Python CLI
 
 ```sh
