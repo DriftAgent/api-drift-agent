@@ -53,6 +53,10 @@ runs:
         cp -r "$GITHUB_ACTION_PATH/scripts/." /tmp/scripts/
         chmod -R +x /tmp/scripts/
 
+    - name: Set up pnpm (if needed)
+      if: hashFiles('pnpm-lock.yaml') != ''
+      uses: pnpm/action-setup@v4
+
     - name: Detect project type
       id: detect
       shell: bash
