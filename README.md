@@ -1,6 +1,7 @@
 # api-drift-agent
 
 [![View on GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-api--drift--agent-blue?logo=github)](https://github.com/marketplace/actions/api-drift-agent)
+[![Take a Tour](https://img.shields.io/badge/docs-Take%20a%20Tour-6366f1?logo=gitbook&logoColor=white)](https://pgomes13.github.io/drift-guard-engine/api-drift-agent.html)
 
 LangGraph-powered agent that detects breaking API changes in provider PRs and automatically opens GitHub Issues in affected consumer repos — zero config on consumer side.
 
@@ -47,10 +48,6 @@ Powered by [drift-guard-engine](https://pgomes13.github.io/drift-guard-engine/).
 | `base-schema` | No | Path to OpenAPI schema (auto-detected if omitted) |
 | `head-schema` | No | Path on PR branch (defaults to `base-schema`) |
 | `org-read-token` | No | PAT with `repo:read` + `read:org` for private repos |
-
-## Troubleshooting
-
-See the <a href="https://pgomes13.github.io/drift-guard-engine/api-drift-agent.html#troubleshooting" target="_blank">Troubleshooting guide</a> in the docs.
 
 ## Python CLI
 
