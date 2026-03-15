@@ -127,37 +127,55 @@ def _upsert_issue(
     """Create or update a drift-agent issue in repo. Returns the issue HTML URL or None on failure."""
     title = f"⚠️ Breaking API changes from {provider_repo}" + (f" (PR #{pr_number})" if pr_number else "")
 
-    # Ensure the label exists
+    # Try to ensure the label exists (may fail on repos we don't own — that's fine)
+    has_label = False
     try:
-        client.post(
+        r = client.post(
             f"{_GITHUB_API}/repos/{repo}/labels",
             json={"name": _ISSUE_LABEL, "color": "e11d48", "description": "API drift impact"},
         )
+        has_label = r.status_code in (201, 422)  # 422 = already exists
     except Exception:
         pass
 
     try:
-        # Check for an existing open issue with our label
-        resp = client.get(
-            f"{_GITHUB_API}/repos/{repo}/issues",
-            params={"labels": _ISSUE_LABEL, "state": "open", "per_page": 1},
-        )
-        resp.raise_for_status()
-        existing = resp.json()
+        # Find existing open issue: by label if we own it, by title otherwise
+        existing_number = None
+        if has_label:
+            resp = client.get(
+                f"{_GITHUB_API}/repos/{repo}/issues",
+                params={"labels": _ISSUE_LABEL, "state": "open", "per_page": 10},
+            )
+            resp.raise_for_status()
+            matching = [i for i in resp.json() if provider_repo in i.get("title", "")]
+            if matching:
+                existing_number = matching[0]["number"]
+        else:
+            # Search open issues by title prefix
+            resp = client.get(
+                f"{_GITHUB_API}/repos/{repo}/issues",
+                params={"state": "open", "per_page": 50},
+            )
+            resp.raise_for_status()
+            matching = [i for i in resp.json() if provider_repo in i.get("title", "")]
+            if matching:
+                existing_number = matching[0]["number"]
 
-        if existing:
-            issue_number = existing[0]["number"]
+        if existing_number:
             r = client.patch(
-                f"{_GITHUB_API}/repos/{repo}/issues/{issue_number}",
+                f"{_GITHUB_API}/repos/{repo}/issues/{existing_number}",
                 json={"title": title, "body": body},
             )
             r.raise_for_status()
-            print(f"[notify] Updated issue #{issue_number} in {repo}")
+            print(f"[notify] Updated issue #{existing_number} in {repo}")
             return r.json().get("html_url")
         else:
+            payload: dict = {"title": title, "body": body}
+            if has_label:
+                payload["labels"] = [_ISSUE_LABEL]
             r = client.post(
                 f"{_GITHUB_API}/repos/{repo}/issues",
-                json={"title": title, "body": body, "labels": [_ISSUE_LABEL]},
+                json=payload,
             )
             r.raise_for_status()
             print(f"[notify] Opened issue in {repo}")
