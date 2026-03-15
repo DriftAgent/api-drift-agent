@@ -8,7 +8,7 @@ hero:
     - theme: brand
       text: Quickstart
       link: /guide#quick-start
-    - theme: alt
+    - theme: brand
       text: GitHub Marketplace
       link: https://github.com/marketplace/actions/driftabot-agent
       target: _blank
