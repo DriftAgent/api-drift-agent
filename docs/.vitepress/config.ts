@@ -6,6 +6,8 @@ export default defineConfig({
   base: '/agent/',
 
   themeConfig: {
+    logo: '/logo.png',
+
     nav: [
       { text: 'Guide', link: '/guide' },
       { text: 'CLI', link: '/cli' },

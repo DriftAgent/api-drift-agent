@@ -1,3 +1,5 @@
+<img src="docs/public/logo.png" alt="DriftaBot" width="120">
+
 # DriftaBot Agent
 
 <a href="https://driftabot.github.io/agent/guide#quick-start" target="_blank"><img src="https://img.shields.io/badge/Quickstart-6366f1?logo=gitbook&logoColor=white" alt="Quickstart"></a>
